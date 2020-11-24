@@ -15,12 +15,12 @@ public class ImageSegmentorDemo extends JFrame implements ActionListener {
 	}
 	
 	private ImageSegmentor segmentor;
-	private JButton openButton, processButton, saveButton;
-	private JSpinner kSpinner, iterationsSpinner;
-	private JPanel controlPanel, previewPanel;
+	private final JButton openButton, processButton, saveButton;
+	private final JSpinner kSpinner, iterationsSpinner;
+	private final JPanel previewPanel;
 	private JLabel beforeLabel, afterLabel;
 	private BufferedImage in, out;
-	private JProgressBar progressBar;
+	private final JProgressBar progressBar;
 	
 	public ImageSegmentorDemo() {
 		super("Image Segmentor");
@@ -29,8 +29,8 @@ public class ImageSegmentorDemo extends JFrame implements ActionListener {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		Container contentPane = getContentPane();
-		
-		controlPanel = new JPanel();
+
+		JPanel controlPanel = new JPanel();
 		
 		openButton = new JButton("Open");
 		processButton = new JButton("Process");
@@ -127,58 +127,55 @@ public class ImageSegmentorDemo extends JFrame implements ActionListener {
 		saveButton.setEnabled(false);
 		kSpinner.setEnabled(false);
 		iterationsSpinner.setEnabled(false);
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				progressBar.setIndeterminate(false);
-				progressBar.setEnabled(true);
-				progressBar.setValue(0);
-				
-				progressBar.setString("Initialising");
-				int k = (int) kSpinner.getValue();
-				int iterations = (int) iterationsSpinner.getValue();
-				segmentor = new ImageSegmentor(in, k, iterations);
-				progressBar.setValue(5);
-				
-				progressBar.setString("Parsing");
-				segmentor.parse();
-				progressBar.setValue(25);
-				
-				progressBar.setString("Segmenting");
-				segmentor.segment();
-				progressBar.setValue(55);
-				
-				progressBar.setString("Mapping");
-				segmentor.map();
-				progressBar.setValue(65);
-				
-				progressBar.setString("Updating");
-				segmentor.update();
-				progressBar.setValue(95);
-				
-				progressBar.setString("Fetching output");
-				out = segmentor.getOutput();
-				
-				afterLabel = new JLabel(new ImageIcon(getScaledImage(out, 380)));
-				previewPanel.removeAll();
-				previewPanel.add(beforeLabel);
-				previewPanel.add(afterLabel);
-				previewPanel.removeAll();
-				previewPanel.add(beforeLabel);
-				previewPanel.add(afterLabel);
-				openButton.setEnabled(true);
-				processButton.setEnabled(true);
-				saveButton.setEnabled(true);
-				kSpinner.setEnabled(true);
-				iterationsSpinner.setEnabled(true);
-				
-				Toolkit.getDefaultToolkit().beep();
-				progressBar.setValue(100);
-				progressBar.setString("Done");
-				
-				revalidate();
-				repaint();
-			}
+		new Thread(() -> {
+			progressBar.setIndeterminate(false);
+			progressBar.setEnabled(true);
+			progressBar.setValue(0);
+
+			progressBar.setString("Initialising");
+			int k = (int) kSpinner.getValue();
+			int iterations = (int) iterationsSpinner.getValue();
+			segmentor = new ImageSegmentor(in, k, iterations);
+			progressBar.setValue(5);
+
+			progressBar.setString("Parsing");
+			segmentor.parse();
+			progressBar.setValue(25);
+
+			progressBar.setString("Segmenting");
+			segmentor.segment();
+			progressBar.setValue(55);
+
+			progressBar.setString("Mapping");
+			segmentor.map();
+			progressBar.setValue(65);
+
+			progressBar.setString("Updating");
+			segmentor.update();
+			progressBar.setValue(95);
+
+			progressBar.setString("Fetching output");
+			out = segmentor.getOutput();
+
+			afterLabel = new JLabel(new ImageIcon(getScaledImage(out, 380)));
+			previewPanel.removeAll();
+			previewPanel.add(beforeLabel);
+			previewPanel.add(afterLabel);
+			previewPanel.removeAll();
+			previewPanel.add(beforeLabel);
+			previewPanel.add(afterLabel);
+			openButton.setEnabled(true);
+			processButton.setEnabled(true);
+			saveButton.setEnabled(true);
+			kSpinner.setEnabled(true);
+			iterationsSpinner.setEnabled(true);
+
+			Toolkit.getDefaultToolkit().beep();
+			progressBar.setValue(100);
+			progressBar.setString("Done");
+
+			revalidate();
+			repaint();
 		}).start();
 	}
 	

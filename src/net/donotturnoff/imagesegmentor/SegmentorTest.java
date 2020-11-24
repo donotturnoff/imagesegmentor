@@ -6,11 +6,10 @@ public class SegmentorTest {
 		SegmentorTest test = new SegmentorTest();
 		test.run();
 	}
-	
-	private Segmentor segmentor;
-	private double[][] data;
-	private int k;
-	private int iterations;
+
+	private final double[][] data;
+	private final int k;
+	private final int iterations;
 	
 	public SegmentorTest() {
 		data = new double[][]{
@@ -33,7 +32,7 @@ public class SegmentorTest {
 	}
 	
 	public void run() {
-		segmentor = new Segmentor(data, k, iterations);
+		Segmentor segmentor = new Segmentor(data, k, iterations);
 		segmentor.segment();
 		System.out.println(segmentor);
 	}

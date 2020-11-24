@@ -2,18 +2,17 @@ package net.donotturnoff.imagesegmentor;
 
 import java.awt.Color;
 import java.awt.image.*;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class ImageSegmentor {
 	
 	private Segmentor segmentor;
-	private BufferedImage in;
+	private final BufferedImage in;
 	private BufferedImage out;
 	private HashMap<double[], double[]> map;
 	private double[][] data;
-	private int k;
-	private int iterations;
+	private final int k;
+	private final int iterations;
 	
 	public ImageSegmentor(BufferedImage in, int k, int iterations) {
 		this.in = in;
@@ -45,11 +44,10 @@ public class ImageSegmentor {
 	
 	public void map() {
 		Cluster[] clusters = segmentor.getClusters();
-		map = new HashMap<double[], double[]>();
-		for (int i = 0; i < clusters.length; i++) {
-			Cluster cluster = clusters[i];
+		map = new HashMap<>();
+		for (Cluster cluster : clusters) {
 			double[] mean = cluster.getMean();
-			for (double[] datum: cluster.getData()) {
+			for (double[] datum : cluster.getData()) {
 				map.put(datum, mean);
 			}
 		}

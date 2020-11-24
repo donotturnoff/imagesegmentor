@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Segmentor {
-	private double[][] data;
-	private int k;
-	private int iterations;
+	private final double[][] data;
+	private final int k;
+	private final int iterations;
 	private Cluster[] clusters;
 	
 	public Segmentor(double[][] data, int k, int iterations) throws IllegalArgumentException {
@@ -30,9 +30,9 @@ public class Segmentor {
 	}
 	
 	private int[] shuffleIndices() {
-		ArrayList<Integer> indexWrappers = new ArrayList<Integer>();
+		ArrayList<Integer> indexWrappers = new ArrayList<>();
 		for (int i = 0; i < data.length; i++) {
-			indexWrappers.add(new Integer(i));
+			indexWrappers.add(i);
 		}
 		Collections.shuffle(indexWrappers);
 		int[] indices = new int[indexWrappers.size()];
@@ -80,11 +80,11 @@ public class Segmentor {
 	}
 	
 	public String toString() {
-		String result = "";
+		StringBuilder result = new StringBuilder();
 		for (Cluster cluster: clusters) {
-			result += cluster.toString() + "\n";
+			result.append(cluster.toString()).append("\n");
 		}
-		result = result.substring(0, result.length() - 1);
-		return result;
+		result = new StringBuilder(result.substring(0, result.length() - 1));
+		return result.toString();
 	}
 }
