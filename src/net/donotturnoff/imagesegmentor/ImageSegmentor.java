@@ -3,6 +3,7 @@ package net.donotturnoff.imagesegmentor;
 import java.awt.Color;
 import java.awt.image.*;
 import java.util.HashMap;
+import java.util.List;
 
 public class ImageSegmentor {
 	
@@ -43,7 +44,7 @@ public class ImageSegmentor {
 	}
 	
 	public void map() {
-		Cluster[] clusters = segmentor.getClusters();
+		List<Cluster> clusters = segmentor.getClusters();
 		map = new HashMap<>();
 		for (Cluster cluster : clusters) {
 			double[] mean = cluster.getMean();

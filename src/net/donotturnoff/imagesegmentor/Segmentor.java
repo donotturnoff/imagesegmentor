@@ -2,12 +2,13 @@ package net.donotturnoff.imagesegmentor;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class Segmentor {
 	private final double[][] data;
 	private final int k;
 	private final int iterations;
-	private Cluster[] clusters;
+	private List<Cluster> clusters;
 	
 	public Segmentor(double[][] data, int k, int iterations) throws IllegalArgumentException {
 		if (k > data.length) {
@@ -29,31 +30,27 @@ public class Segmentor {
 		}
 	}
 	
-	private int[] shuffleIndices() {
-		ArrayList<Integer> indexWrappers = new ArrayList<>();
+	private List<Integer> shuffleIndices() {
+		List<Integer> indexWrappers = new ArrayList<>();
 		for (int i = 0; i < data.length; i++) {
 			indexWrappers.add(i);
 		}
 		Collections.shuffle(indexWrappers);
-		int[] indices = new int[indexWrappers.size()];
-		for (int i = 0; i < data.length; i++) {
-			indices[i] = indexWrappers.get(i);
-		}
-		return indices;
+		return indexWrappers;
 	}
 	
 	private void generateClusters() {
-		int[] indices = shuffleIndices();
-		clusters = new Cluster[k];
+		List<Integer> indices = shuffleIndices();
+		clusters = new ArrayList<>();
 		for (int i = 0; i < k; i++) {
-			int index = indices[i];
-			clusters[i] = new Cluster(data[index]);
+			int index = indices.get(i);
+			clusters.add(new Cluster(data[index]));
 		}
 	}
 	
 	private void distributeData() {
 		for (double[] datum: data) {
-			Cluster closest = clusters[0];
+			Cluster closest = clusters.get(0);
 			for (Cluster cluster: clusters) {
 				if (cluster.distanceFrom(datum) < closest.distanceFrom(datum)) {
 					closest = cluster;
@@ -75,7 +72,7 @@ public class Segmentor {
 		}
 	}
 	
-	public Cluster[] getClusters() {
+	public List<Cluster> getClusters() {
 		return clusters;
 	}
 	
